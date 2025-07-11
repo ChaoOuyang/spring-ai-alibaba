@@ -222,6 +222,27 @@ public class ManusProperties {
 		this.baseDir = baseDir;
 	}
 
+	public void setAllowExternalAccess(Boolean allowExternalAccess) {
+		this.allowExternalAccess = allowExternalAccess;
+	}
+
+	@ConfigProperty(group = "manus", subGroup = "general", key = "currentNamespace", path = "manus.currentNamespace",
+			description = "agent和prompt所属命名空间", defaultValue = "", inputType = ConfigInputType.NUMBER)
+	private volatile String currentNamespace = null;
+
+	public String getCurrentNamespace() {
+		String configPath = "manus.currentNamespace";
+		String value = configService.getConfigValue(configPath);
+		if (value != null) {
+			currentNamespace = value;
+		}
+		return null;
+	}
+
+	public void setCurrentNamespaceId(String currentNamespace) {
+		this.currentNamespace = currentNamespace;
+	}
+
 	// Normal Settings
 	// End----------------------------------------------------------------------------------------------
 
@@ -308,10 +329,6 @@ public class ManusProperties {
 			allowExternalAccess = false;
 		}
 		return allowExternalAccess;
-	}
-
-	public void setAllowExternalAccess(Boolean allowExternalAccess) {
-		this.allowExternalAccess = allowExternalAccess;
 	}
 
 }

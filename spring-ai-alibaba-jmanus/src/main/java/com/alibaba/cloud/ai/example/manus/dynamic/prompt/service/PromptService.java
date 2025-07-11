@@ -23,7 +23,7 @@ import java.util.Map;
 
 public interface PromptService {
 
-	List<PromptVO> getAll();
+	List<PromptVO> getAll(Integer namespace);
 
 	PromptVO getById(Long id);
 

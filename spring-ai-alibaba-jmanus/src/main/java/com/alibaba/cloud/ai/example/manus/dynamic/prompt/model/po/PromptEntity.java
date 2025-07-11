@@ -64,7 +64,7 @@ public class PromptEntity {
 		this.promptName = promptName;
 	}
 
-	public String getNamespace() {
+	public String  getNamespace() {
 		return namespace;
 	}
 

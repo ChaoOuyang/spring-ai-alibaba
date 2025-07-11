@@ -33,8 +33,8 @@ public class PromptController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<PromptVO>> getAll() {
-		return ResponseEntity.ok(promptService.getAll());
+	public ResponseEntity<List<PromptVO>> getAll(@PathVariable("namespace") Integer namespace) {
+		return ResponseEntity.ok(promptService.getAll(namespace));
 	}
 
 	@GetMapping("/{id}")

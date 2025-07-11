@@ -23,7 +23,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PromptRepository extends JpaRepository<PromptEntity, Long> {
 
-	@Query(value = "select * from prompt where prompt_name = ?1", nativeQuery = true)
-	PromptEntity findByPromptName(String promptName);
+	@Query(value = "select * from prompt where namespace = ?1 and prompt_name = ?2", nativeQuery = true)
+	PromptEntity findByNamespaceAndPromptName(String namespace, String promptName);
 
 }

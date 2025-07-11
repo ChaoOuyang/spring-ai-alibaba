@@ -23,7 +23,7 @@ import com.alibaba.cloud.ai.example.manus.dynamic.agent.model.Tool;
 
 public interface AgentService {
 
-	List<AgentConfig> getAllAgents();
+	List<AgentConfig> getAllAgents(String namespace);
 
 	AgentConfig getAgentById(String id);
 

@@ -61,7 +61,7 @@ public class DynamicAgentLoader {
 	}
 
 	public DynamicAgent loadAgent(String agentName, Map<String, Object> initialAgentSetting) {
-		DynamicAgentEntity entity = repository.findByAgentName(agentName);
+		DynamicAgentEntity entity = repository.findByNamespaceAndAgentName(properties.getCurrentNamespace(), agentName);
 		if (entity == null) {
 			throw new IllegalArgumentException("Agent not found: " + agentName);
 		}

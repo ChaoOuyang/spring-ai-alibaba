@@ -42,8 +42,8 @@ public class AgentController {
 	private AgentService agentService;
 
 	@GetMapping
-	public ResponseEntity<List<AgentConfig>> getAllAgents() {
-		return ResponseEntity.ok(agentService.getAllAgents());
+	public ResponseEntity<List<AgentConfig>> getAllAgents(@PathVariable("namespace") String namespace) {
+		return ResponseEntity.ok(agentService.getAllAgents(namespace));
 	}
 
 	@GetMapping("/{id}")

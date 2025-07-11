@@ -18,6 +18,7 @@ package com.alibaba.cloud.ai.example.manus.dynamic.agent.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -79,8 +80,12 @@ public class AgentServiceImpl implements AgentService {
 	}
 
 	@Override
-	public List<AgentConfig> getAllAgents() {
-		return repository.findAll().stream().map(this::mapToAgentConfig).collect(Collectors.toList());
+	public List<AgentConfig> getAllAgents(String namespace) {
+		return repository.findAll()
+			.stream()
+			.filter(item -> Objects.equals(namespace, item.getNamespace()))
+			.map(this::mapToAgentConfig)
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -94,7 +99,8 @@ public class AgentServiceImpl implements AgentService {
 	public AgentConfig createAgent(AgentConfig config) {
 		try {
 			// Check if an Agent with the same name already exists
-			DynamicAgentEntity existingAgent = repository.findByAgentName(config.getName());
+			DynamicAgentEntity existingAgent = repository.findByNamespaceAndAgentName(config.getNamespace(),
+					config.getName());
 			if (existingAgent != null) {
 				log.info("Found Agent with same name: {}, updating Agent", config.getName());
 				config.setId(existingAgent.getId().toString());
@@ -114,7 +120,8 @@ public class AgentServiceImpl implements AgentService {
 			// If it's a uniqueness constraint violation exception, try returning the
 			// existing Agent
 			if (e.getMessage() != null && e.getMessage().contains("Unique")) {
-				DynamicAgentEntity existingAgent = repository.findByAgentName(config.getName());
+				DynamicAgentEntity existingAgent = repository.findByNamespaceAndAgentName(config.getNamespace(),
+						config.getName());
 				if (existingAgent != null) {
 					log.info("Return existing Agent: {}", config.getName());
 					return mapToAgentConfig(existingAgent);
@@ -214,6 +221,9 @@ public class AgentServiceImpl implements AgentService {
 		if (model != null) {
 			entity.setModel(new DynamicModelEntity(model.getId()));
 		}
+
+		// 4. Set the user-selected namespace
+		entity.setNamespace(config.getNamespace());
 	}
 
 	private DynamicAgentEntity mergePrompts(DynamicAgentEntity entity, String agentName) {

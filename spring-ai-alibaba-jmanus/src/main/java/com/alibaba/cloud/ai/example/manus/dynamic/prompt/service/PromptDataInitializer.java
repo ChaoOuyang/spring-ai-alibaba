@@ -16,6 +16,7 @@
 
 package com.alibaba.cloud.ai.example.manus.dynamic.prompt.service;
 
+import com.alibaba.cloud.ai.example.manus.config.ManusProperties;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.model.enums.PromptEnum;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.model.po.PromptEntity;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.repository.PromptRepository;
@@ -32,11 +33,15 @@ public class PromptDataInitializer implements CommandLineRunner {
 
 	private final PromptLoader promptLoader;
 
+	private final ManusProperties manusProperties;
+
 	private static final Logger log = LoggerFactory.getLogger(PromptDataInitializer.class);
 
-	public PromptDataInitializer(PromptRepository promptRepository, PromptLoader promptLoader) {
+	public PromptDataInitializer(PromptRepository promptRepository, PromptLoader promptLoader,
+			ManusProperties manusProperties) {
 		this.promptRepository = promptRepository;
 		this.promptLoader = promptLoader;
+		this.manusProperties = manusProperties;
 	}
 
 	@Override
@@ -56,7 +61,8 @@ public class PromptDataInitializer implements CommandLineRunner {
 	}
 
 	private void createPromptIfNotExists(PromptEnum prompt) {
-		PromptEntity promptEntity = promptRepository.findByPromptName(prompt.getPromptName());
+		PromptEntity promptEntity = promptRepository.findByNamespaceAndPromptName(manusProperties.getCurrentNamespace(),
+				prompt.getPromptName());
 
 		if (promptEntity == null) {
 			promptEntity = new PromptEntity();

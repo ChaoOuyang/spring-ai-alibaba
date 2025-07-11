@@ -21,14 +21,14 @@ import com.alibaba.cloud.ai.example.manus.dynamic.model.entity.DynamicModelEntit
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "dynamic_agents")
+@Table(name = "dynamic_agents", uniqueConstraints = { @UniqueConstraint(columnNames = { "agentName", "namespace" }) })
 public class DynamicAgentEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String agentName;
 
 	@Column(nullable = false, length = 1000)
@@ -52,6 +52,9 @@ public class DynamicAgentEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "model_id")
 	private DynamicModelEntity model;
+
+	@Column(nullable = true)
+	private String namespace;
 
 	// Getters and Setters
 	public Long getId() {
@@ -128,6 +131,14 @@ public class DynamicAgentEntity {
 
 	public void setModel(DynamicModelEntity model) {
 		this.model = model;
+	}
+
+	public String getNamespace() {
+		return namespace;
+	}
+
+	public void setNamespace(String namespace) {
+		this.namespace = namespace;
 	}
 
 }
