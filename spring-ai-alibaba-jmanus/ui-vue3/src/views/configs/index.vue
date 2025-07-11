@@ -1,4 +1,4 @@
-<!-- 
+<!--
  * Copyright 2025 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,6 +48,7 @@
         <BasicConfig v-if="activeCategory === 'basic'" />
         <AgentConfig v-if="activeCategory === 'agent'" />
         <ModelConfig v-if="activeCategory === 'model'" />
+        <NamespaceConfig v-if="activeCategory === 'namespace'" />
         <McpConfig v-if="activeCategory === 'mcp'" />
       </div>
     </div>
@@ -61,6 +62,7 @@ import { useI18n } from 'vue-i18n'
 import BasicConfig from './basicConfig.vue'
 import AgentConfig from './agentConfig.vue'
 import ModelConfig from './modelConfig.vue'
+import NamespaceConfig from './namespaceConfig.vue'
 import McpConfig from './mcpConfig.vue'
 import LanguageSwitcher from '@/components/language-switcher/index.vue'
 
@@ -71,6 +73,7 @@ const categories = computed(() => [
   { key: 'basic', label: t('config.categories.basic'), icon: 'carbon:settings' },
   { key: 'agent', label: t('config.categories.agent'), icon: 'carbon:bot' },
   { key: 'model', label: t('config.categories.model'), icon: 'carbon:build-image' },
+  { key: 'namespace', label: t('config.categories.namespace'), icon: 'carbon:folder' },
   { key: 'mcp', label: t('config.categories.mcp'), icon: 'carbon:tool-box' },
 ])
 </script>
@@ -159,3 +162,4 @@ const categories = computed(() => [
   background: rgba(255, 255, 255, 0.1);
 }
 </style>
+

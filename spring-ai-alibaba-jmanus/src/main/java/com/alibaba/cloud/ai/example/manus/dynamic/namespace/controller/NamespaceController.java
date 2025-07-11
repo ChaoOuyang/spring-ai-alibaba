@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.cloud.ai.example.manus.dynamic.agent.controller;
+package com.alibaba.cloud.ai.example.manus.dynamic.namespace.controller;
 
-import java.util.List;
-
+import com.alibaba.cloud.ai.example.manus.dynamic.namespace.namespace.vo.NamespaceConfig;
+import com.alibaba.cloud.ai.example.manus.dynamic.namespace.service.NamespaceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,59 +29,47 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.cloud.ai.example.manus.dynamic.agent.model.Tool;
-import com.alibaba.cloud.ai.example.manus.dynamic.agent.service.AgentConfig;
-import com.alibaba.cloud.ai.example.manus.dynamic.agent.service.AgentService;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/agents")
+@RequestMapping("/api/namespaces")
 @CrossOrigin(origins = "*") // Add cross-origin support
-public class AgentController {
+public class NamespaceController {
 
 	@Autowired
-	private AgentService agentService;
+	private NamespaceService namespaceService;
 
 	@GetMapping
-	public ResponseEntity<List<AgentConfig>> getAllAgents() {
-		return ResponseEntity.ok(agentService.getAllAgents());
-	}
-
-	@GetMapping("/namespace/{namespace}")
-	public ResponseEntity<List<AgentConfig>> getAgentsByNamespace(@PathVariable("namespace") String namespace) {
-		return ResponseEntity.ok(agentService.getAllAgentsByNamespace(namespace));
+	public ResponseEntity<List<NamespaceConfig>> getAllNamespaces() {
+		return ResponseEntity.ok(namespaceService.getAllNamespaces());
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<AgentConfig> getAgentById(@PathVariable("id") String id) {
-		return ResponseEntity.ok(agentService.getAgentById(id));
+	public ResponseEntity<NamespaceConfig> getNamespaceById(@PathVariable("id") String id) {
+		return ResponseEntity.ok(namespaceService.getNamespaceById(id));
 	}
 
 	@PostMapping
-	public ResponseEntity<AgentConfig> createAgent(@RequestBody AgentConfig agentConfig) {
-		return ResponseEntity.ok(agentService.createAgent(agentConfig));
+	public ResponseEntity<NamespaceConfig> createNamespace(@RequestBody NamespaceConfig namespaceConfig) {
+		return ResponseEntity.ok(namespaceService.createNamespace(namespaceConfig));
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<AgentConfig> updateAgent(@PathVariable("id") String id,
-			@RequestBody AgentConfig agentConfig) {
-		agentConfig.setId(id);
-		return ResponseEntity.ok(agentService.updateAgent(agentConfig));
+	public ResponseEntity<NamespaceConfig> updateNamespace(@PathVariable("id") Long id,
+			@RequestBody NamespaceConfig namespaceConfig) {
+		namespaceConfig.setId(id);
+		return ResponseEntity.ok(namespaceService.updateNamespace(namespaceConfig));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> deleteAgent(@PathVariable("id") String id) {
+	public ResponseEntity<Void> deleteNamespace(@PathVariable("id") String id) {
 		try {
-			agentService.deleteAgent(id);
+			namespaceService.deleteNamespace(id);
 			return ResponseEntity.ok().build();
 		}
 		catch (IllegalArgumentException e) {
 			return ResponseEntity.badRequest().build();
 		}
-	}
-
-	@GetMapping("/tools")
-	public ResponseEntity<List<Tool>> getAvailableTools() {
-		return ResponseEntity.ok(agentService.getAvailableTools());
 	}
 
 }

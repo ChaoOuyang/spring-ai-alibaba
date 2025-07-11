@@ -13,21 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.cloud.ai.example.manus.dynamic.prompt.repository;
+package com.alibaba.cloud.ai.example.manus.dynamic.namespace.repository;
 
-import com.alibaba.cloud.ai.example.manus.dynamic.prompt.model.po.PromptEntity;
+import com.alibaba.cloud.ai.example.manus.dynamic.namespace.entity.NamespaceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
-public interface PromptRepository extends JpaRepository<PromptEntity, Long> {
+public interface NamespaceRepository extends JpaRepository<NamespaceEntity, Long> {
 
-	@Query(value = "select * from prompt where namespace = ?1 and prompt_name = ?2", nativeQuery = true)
-	PromptEntity findByNamespaceAndPromptName(String namespace, String promptName);
+	NamespaceEntity findByName(String name);
 
-	List<PromptEntity> getAllByNamespace(String namespace);
+	NamespaceEntity findByCode(String code);
 
 }

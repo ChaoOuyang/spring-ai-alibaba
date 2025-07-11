@@ -16,12 +16,14 @@
 
 package com.alibaba.cloud.ai.example.manus.dynamic.prompt.service;
 
+import com.alibaba.cloud.ai.example.manus.config.ManusProperties;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.model.enums.PromptEnum;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.model.po.PromptEntity;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.repository.PromptRepository;
 import com.alibaba.cloud.ai.example.manus.prompt.PromptLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,9 @@ public class PromptDataInitializer implements CommandLineRunner {
 	private final PromptRepository promptRepository;
 
 	private final PromptLoader promptLoader;
+
+	@Value("${namespace.value}")
+	private String namespace;
 
 	private static final Logger log = LoggerFactory.getLogger(PromptDataInitializer.class);
 
@@ -56,11 +61,12 @@ public class PromptDataInitializer implements CommandLineRunner {
 	}
 
 	private void createPromptIfNotExists(PromptEnum prompt) {
-		PromptEntity promptEntity = promptRepository.findByPromptName(prompt.getPromptName());
+		PromptEntity promptEntity = promptRepository.findByNamespaceAndPromptName(namespace, prompt.getPromptName());
 
 		if (promptEntity == null) {
 			promptEntity = new PromptEntity();
 			promptEntity.setPromptName(prompt.getPromptName());
+			promptEntity.setNamespace(namespace);
 			promptEntity.setPromptDescription(prompt.getPromptDescription());
 			promptEntity.setMessageType(prompt.getMessageType().name());
 			promptEntity.setType(prompt.getType().name());

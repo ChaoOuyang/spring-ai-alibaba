@@ -18,6 +18,7 @@ package com.alibaba.cloud.ai.example.manus.dynamic.agent.service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.model.tool.ToolCallingManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +86,14 @@ public class AgentServiceImpl implements AgentService {
 	}
 
 	@Override
+	public List<AgentConfig> getAllAgentsByNamespace(String namespace) {
+		return repository.findAllByNamespace(namespace)
+			.stream()
+			.map(this::mapToAgentConfig)
+			.collect(Collectors.toList());
+	}
+
+	@Override
 	public AgentConfig getAgentById(String id) {
 		DynamicAgentEntity entity = repository.findById(Long.parseLong(id))
 			.orElseThrow(() -> new IllegalArgumentException("Agent not found: " + id));
@@ -94,7 +104,8 @@ public class AgentServiceImpl implements AgentService {
 	public AgentConfig createAgent(AgentConfig config) {
 		try {
 			// Check if an Agent with the same name already exists
-			DynamicAgentEntity existingAgent = repository.findByAgentName(config.getName());
+			DynamicAgentEntity existingAgent = repository.findByNamespaceAndAgentName(config.getNamespace(),
+					config.getName());
 			if (existingAgent != null) {
 				log.info("Found Agent with same name: {}, updating Agent", config.getName());
 				config.setId(existingAgent.getId().toString());
@@ -114,7 +125,8 @@ public class AgentServiceImpl implements AgentService {
 			// If it's a uniqueness constraint violation exception, try returning the
 			// existing Agent
 			if (e.getMessage() != null && e.getMessage().contains("Unique")) {
-				DynamicAgentEntity existingAgent = repository.findByAgentName(config.getName());
+				DynamicAgentEntity existingAgent = repository.findByNamespaceAndAgentName(config.getNamespace(),
+						config.getName());
 				if (existingAgent != null) {
 					log.info("Return existing Agent: {}", config.getName());
 					return mapToAgentConfig(existingAgent);
@@ -214,6 +226,9 @@ public class AgentServiceImpl implements AgentService {
 		if (model != null) {
 			entity.setModel(new DynamicModelEntity(model.getId()));
 		}
+
+		// 4. Set the user-selected namespace
+		entity.setNamespace(config.getNamespace());
 	}
 
 	private DynamicAgentEntity mergePrompts(DynamicAgentEntity entity, String agentName) {

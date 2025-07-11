@@ -221,7 +221,6 @@ public class ManusProperties {
 	public void setBaseDir(String baseDir) {
 		this.baseDir = baseDir;
 	}
-
 	// Normal Settings
 	// End----------------------------------------------------------------------------------------------
 
@@ -308,10 +307,6 @@ public class ManusProperties {
 			allowExternalAccess = false;
 		}
 		return allowExternalAccess;
-	}
-
-	public void setAllowExternalAccess(Boolean allowExternalAccess) {
-		this.allowExternalAccess = allowExternalAccess;
 	}
 
 }

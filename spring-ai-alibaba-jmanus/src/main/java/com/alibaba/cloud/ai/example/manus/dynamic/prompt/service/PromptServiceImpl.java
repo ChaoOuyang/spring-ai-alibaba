@@ -15,6 +15,7 @@
  */
 package com.alibaba.cloud.ai.example.manus.dynamic.prompt.service;
 
+import com.alibaba.cloud.ai.example.manus.config.ManusProperties;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.model.po.PromptEntity;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.model.vo.PromptVO;
 import com.alibaba.cloud.ai.example.manus.dynamic.prompt.repository.PromptRepository;
@@ -26,16 +27,21 @@ import org.springframework.ai.chat.prompt.AssistantPromptTemplate;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.chat.prompt.SystemPromptTemplate;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 public class PromptServiceImpl implements PromptService {
 
 	private final PromptRepository promptRepository;
+
+	@Value("${namespace.value}")
+	private String namespace;
 
 	private static final Logger log = LoggerFactory.getLogger(PromptDataInitializer.class);
 
@@ -46,7 +52,14 @@ public class PromptServiceImpl implements PromptService {
 	@Override
 	public List<PromptVO> getAll() {
 		return promptRepository.findAll().stream().map(this::mapToPromptVO).collect(Collectors.toList());
+	}
 
+	@Override
+	public List<PromptVO> getAllByNamespace(String namespace) {
+		return promptRepository.getAllByNamespace(namespace)
+			.stream()
+			.map(this::mapToPromptVO)
+			.collect(Collectors.toList());
 	}
 
 	@Override
@@ -66,7 +79,8 @@ public class PromptServiceImpl implements PromptService {
 			throw new IllegalArgumentException("Cannot create built-in prompt");
 		}
 
-		PromptEntity prompt = promptRepository.findByPromptName(promptVO.getPromptName());
+		PromptEntity prompt = promptRepository.findByNamespaceAndPromptName(promptVO.getNamespace(),
+				promptVO.getPromptName());
 		if (prompt != null) {
 			log.error("Found Prompt is existed: promptName :{} , namespace:{}, type :{}, String messageType:{}",
 					promptVO.getPromptName(), promptVO.getNamespace(), promptVO.getType(), promptVO.getMessageType());
@@ -120,7 +134,7 @@ public class PromptServiceImpl implements PromptService {
 	 */
 	@Override
 	public Message createSystemMessage(String promptName, Map<String, Object> variables) {
-		PromptEntity promptEntity = promptRepository.findByPromptName(promptName);
+		PromptEntity promptEntity = promptRepository.findByNamespaceAndPromptName(namespace, promptName);
 		if (promptEntity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}
@@ -137,7 +151,7 @@ public class PromptServiceImpl implements PromptService {
 	 */
 	@Override
 	public Message createUserMessage(String promptName, Map<String, Object> variables) {
-		PromptEntity promptEntity = promptRepository.findByPromptName(promptName);
+		PromptEntity promptEntity = promptRepository.findByNamespaceAndPromptName(namespace, promptName);
 		if (promptEntity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}
@@ -148,7 +162,7 @@ public class PromptServiceImpl implements PromptService {
 
 	@Override
 	public Message createMessage(String promptName, Map<String, Object> variables) {
-		PromptEntity promptEntity = promptRepository.findByPromptName(promptName);
+		PromptEntity promptEntity = promptRepository.findByNamespaceAndPromptName(namespace, promptName);
 		if (promptEntity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}
@@ -180,7 +194,7 @@ public class PromptServiceImpl implements PromptService {
 	 */
 	@Override
 	public String renderPrompt(String promptName, Map<String, Object> variables) {
-		PromptEntity promptEntity = promptRepository.findByPromptName(promptName);
+		PromptEntity promptEntity = promptRepository.findByNamespaceAndPromptName(namespace, promptName);
 		if (promptEntity == null) {
 			throw new IllegalArgumentException("Prompt not found: " + promptName);
 		}

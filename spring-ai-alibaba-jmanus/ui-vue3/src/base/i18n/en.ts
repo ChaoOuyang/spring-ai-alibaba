@@ -104,6 +104,7 @@ const words: I18nType = {
       basic: 'Basic Configuration',
       agent: 'Agent Configuration',
       model: 'Model Configuration',
+      namespace: 'Namespace Configuration',
       mcp: 'Tools/MCP Configuration'
     },
     // Agent configuration page
@@ -221,6 +222,43 @@ const words: I18nType = {
       saveFailed: 'Save failed, please try again',
       resetFailed: 'Reset failed, please try again',
       importFailed: 'Import failed, please check file format'
+    },
+    // Namespace configuration page
+    namespaceConfig: {
+      title: 'Namespace Configuration',
+      import: 'Import',
+      export: 'Export',
+      configuredNamespaces: 'Configured Namespaces',
+      namespaceCount: 'namespaces',
+      noNamespace: 'No namespace configurations available',
+      createNew: 'Create New Namespace',
+      selectNamespaceHint: 'Please select a namespace to configure',
+      newNamespace: 'New Namespace',
+      name: 'Namespace Name',
+      namePlaceholder: 'Enter namespace name',
+      code: 'Namespace Code',
+      codePlaceholder: 'Enter namespace code',
+      description: 'Description',
+      descriptionPlaceholder: 'Enter namespace description',
+      deleteConfirm: 'Delete Confirmation',
+      deleteConfirmText: 'Are you sure you want to delete',
+      deleteWarning: 'This action cannot be undone.',
+      requiredFields: 'Please fill in all required fields',
+      createSuccess: 'Namespace created successfully',
+      createFailed: 'Failed to create namespace',
+      saveSuccess: 'Namespace saved successfully',
+      saveFailed: 'Failed to save namespace',
+      deleteSuccess: 'Namespace deleted successfully',
+      deleteFailed: 'Failed to delete namespace',
+      importSuccess: 'Namespace imported successfully',
+      importFailed: 'Failed to import namespace',
+      exportSuccess: 'Namespace exported successfully',
+      exportFailed: 'Failed to export namespace',
+      importNotImplemented: 'Import feature not implemented yet',
+      exportNotImplemented: 'Export feature not implemented yet',
+      loadDataFailed: 'Failed to load data',
+      loadDetailsFailed: 'Failed to load namespace details',
+      invalidFormat: 'Namespace configuration format is invalid: missing required fields'
     }
   },
 

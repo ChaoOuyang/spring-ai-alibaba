@@ -104,6 +104,7 @@ const words: I18nType = {
       basic: '基础配置',
       agent: 'Agent配置',
       model: 'Model配置',
+      namespace: 'Namespace配置',
       mcp: 'Tools/MCP配置'
     },
     // Agent配置页面
@@ -221,6 +222,43 @@ const words: I18nType = {
       saveFailed: '保存失败，请重试',
       resetFailed: '重置失败，请重试',
       importFailed: '导入失败，请检查文件格式'
+    },
+    // Namespace配置页面
+    namespaceConfig: {
+      title: 'Namespace配置',
+      import: '导入',
+      export: '导出',
+      configuredNamespaces: '已配置的Namespace',
+      namespaceCount: '个',
+      noNamespace: '暂无Namespace配置',
+      createNew: '新建Namespace',
+      selectNamespaceHint: '请选择一个Namespace进行配置',
+      newNamespace: '新建Namespace',
+      name: 'Namespace名称',
+      namePlaceholder: '输入Namespace名称',
+      code: 'Namespace代码',
+      codePlaceholder: '输入Namespace代码',
+      description: '描述',
+      descriptionPlaceholder: '输入Namespace描述',
+      deleteConfirm: '删除确认',
+      deleteConfirmText: '确定要删除',
+      deleteWarning: '此操作不可恢复。',
+      requiredFields: '请填写必要的字段',
+      createSuccess: 'Namespace创建成功',
+      createFailed: '创建Namespace失败',
+      saveSuccess: 'Namespace保存成功',
+      saveFailed: '保存Namespace失败',
+      deleteSuccess: 'Namespace删除成功',
+      deleteFailed: '删除Namespace失败',
+      importSuccess: 'Namespace导入成功',
+      importFailed: '导入Namespace失败',
+      exportSuccess: 'Namespace导出成功',
+      exportFailed: '导出Namespace失败',
+      importNotImplemented: '导入功能暂未实现',
+      exportNotImplemented: '导出功能暂未实现',
+      loadDataFailed: '加载数据失败',
+      loadDetailsFailed: '加载Namespace详情失败',
+      invalidFormat: 'Namespace配置格式不正确：缺少必要字段'
     }
   },
 

@@ -18,9 +18,11 @@ package com.alibaba.cloud.ai.example.manus.dynamic.agent.service;
 import java.util.List;
 import java.util.Set;
 
+import com.alibaba.cloud.ai.example.manus.config.ManusProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
@@ -49,6 +51,9 @@ public class DynamicAgentScanner {
 
 	@Autowired
 	private StartupAgentConfigLoader startupAgentConfigLoader;
+
+	@Value("${namespace.value}")
+	private String namespace;
 
 	@Autowired
 	public DynamicAgentScanner(DynamicAgentRepository repository) {
@@ -186,7 +191,8 @@ public class DynamicAgentScanner {
 				StartupAgentConfigLoader.AgentConfig agentConfig = startupAgentConfigLoader.loadAgentConfig(agentDir);
 				if (agentConfig != null) {
 					// Check if this is an override or new creation
-					DynamicAgentEntity existingEntity = repository.findByAgentName(agentConfig.getAgentName());
+					DynamicAgentEntity existingEntity = repository.findByNamespaceAndAgentName(namespace,
+							agentConfig.getAgentName());
 					if (existingEntity != null) {
 						overriddenCount++;
 					}
@@ -212,13 +218,15 @@ public class DynamicAgentScanner {
 	 */
 	private void saveStartupAgent(StartupAgentConfigLoader.AgentConfig agentConfig) {
 		// Check if there is a dynamic agent with the same name
-		DynamicAgentEntity existingEntity = repository.findByAgentName(agentConfig.getAgentName());
+		DynamicAgentEntity existingEntity = repository.findByNamespaceAndAgentName(namespace,
+				agentConfig.getAgentName());
 
 		// Create or update dynamic agent entity
 		DynamicAgentEntity entity = (existingEntity != null) ? existingEntity : new DynamicAgentEntity();
 
 		// Update all fields (force override if exists)
 		entity.setAgentName(agentConfig.getAgentName());
+		entity.setNamespace(namespace);
 		entity.setAgentDescription(agentConfig.getAgentDescription());
 		entity.setNextStepPrompt(agentConfig.getNextStepPrompt());
 		entity.setAvailableToolKeys(agentConfig.getAvailableToolKeys());
